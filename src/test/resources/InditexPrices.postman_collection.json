@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "c015b976-da3d-4ed4-a887-93f5ed475576",
+		"name": "Prueba Inditex",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28730296"
+	},
+	"item": [
+		{
+			"name": "Search Prices",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/prices?brandId={{brandId}}&productId={{productId}}&applicationDate={{applicationDate}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"prices"
+					],
+					"query": [
+						{
+							"key": "brandId",
+							"value": "{{brandId}}"
+						},
+						{
+							"key": "productId",
+							"value": "{{productId}}"
+						},
+						{
+							"key": "applicationDate",
+							"value": "{{applicationDate}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"// Datos de prueba definidos en el enunciado\r",
+					"const testData = [\r",
+					"    { brandId: 1, productId: 35455, applicationDate: \"2020-06-14T10:00:00.000Z\", expectedPrice: 35.50 },\r",
+					"    { brandId: 1, productId: 35455, applicationDate: \"2020-06-14T16:00:00.000Z\", expectedPrice: 25.45 },\r",
+					"    { brandId: 1, productId: 35455, applicationDate: \"2020-06-14T21:00:00.000Z\", expectedPrice: 35.50 },\r",
+					"    { brandId: 1, productId: 35455, applicationDate: \"2020-06-15T10:00:00.000Z\", expectedPrice: 30.50 },\r",
+					"    { brandId: 1, productId: 35455, applicationDate: \"2020-06-16T21:00:00.000Z\", expectedPrice: 38.95 }\r",
+					"];\r",
+					"\r",
+					"// Almacenar los datos de prueba en una variable de entorno\r",
+					"pm.environment.set(\"testData\", JSON.stringify(testData));\r",
+					"\r",
+					"// Inicializar el índice de iteración si no existe\r",
+					"if (!pm.environment.get(\"currentIndex\")) {\r",
+					"    pm.environment.set(\"currentIndex\", 0);\r",
+					"}\r",
+					"\r",
+					"// Establecer las variables para la iteración actual\r",
+					"const currentIndex = parseInt(pm.environment.get(\"currentIndex\"));\r",
+					"const currentTestData = testData[currentIndex];\r",
+					"\r",
+					"// Log the current test data\r",
+					"console.log(\"Setting variables for current test data:\", currentTestData);\r",
+					"\r",
+					"pm.environment.set(\"brandId\", currentTestData.brandId);\r",
+					"pm.environment.set(\"productId\", currentTestData.productId);\r",
+					"pm.environment.set(\"applicationDate\", currentTestData.applicationDate);\r",
+					"pm.environment.set(\"currency\", currentTestData.currency);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"// Obtener el índice actual de iteración\r",
+					"const currentIndex = parseInt(pm.environment.get(\"currentIndex\"));\r",
+					"const testData = JSON.parse(pm.environment.get(\"testData\"));\r",
+					"const currentTestData = testData[currentIndex];\r",
+					"\r",
+					"// Log the current test data and response\r",
+					"console.log(\"Current Test Data:\", currentTestData);\r",
+					"console.log(\"Response Data:\", pm.response.json());\r",
+					"\r",
+					"// Validar la respuesta\r",
+					"pm.test(\"Status code is 200\", function () {\r",
+					"    pm.response.to.have.status(200);\r",
+					"});\r",
+					"\r",
+					"pm.test(\"Response contains expected price\", function () {\r",
+					"    var jsonData = pm.response.json();\r",
+					"    pm.expect(jsonData.price).to.eql(currentTestData.expectedPrice);\r",
+					"});\r",
+					"\r",
+					"// Incrementar el índice de iteración\r",
+					"const nextIndex = currentIndex + 1;\r",
+					"\r",
+					"// Si hay más datos de prueba, configurar los próximos datos y continuar la iteración\r",
+					"if (nextIndex < testData.length) {\r",
+					"    pm.environment.set(\"currentIndex\", nextIndex);\r",
+					"    pm.environment.set(\"brandId\", testData[nextIndex].brandId);\r",
+					"    pm.environment.set(\"productId\", testData[nextIndex].productId);\r",
+					"    pm.environment.set(\"applicationDate\", testData[nextIndex].applicationDate);\r",
+					"    pm.environment.set(\"currency\", testData[nextIndex].currency);\r",
+					"\r",
+					"    // Repetir la solicitud\r",
+					"    postman.setNextRequest(pm.info.requestName);\r",
+					"} else {\r",
+					"    // Limpiar las variables de entorno cuando todas las iteraciones hayan terminado\r",
+					"    pm.environment.unset(\"currentIndex\");\r",
+					"    pm.environment.unset(\"testData\");\r",
+					"    pm.environment.unset(\"brandId\");\r",
+					"    pm.environment.unset(\"productId\");\r",
+					"    pm.environment.unset(\"applicationDate\");\r",
+					"    pm.environment.unset(\"currency\");\r",
+					"}"
+				]
+			}
+		}
+	]
+}

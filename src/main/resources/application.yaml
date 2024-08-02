@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+spring:
+  jpa:
+    generate-ddl: false
+    properties.hibernate.jdbc.time_zone: UTC
+
+rest.search.default_currency: EUR

@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: false
+    
+flyway:
+  schemas: TEST
+  locations: classpath:db/migration
+  baselineOnMigrate: true
+  
+spring.jpa.show-sql: true
+spring.jpa.properties.hibernate.format_sql: true

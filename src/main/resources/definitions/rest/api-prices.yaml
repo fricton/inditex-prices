@@ -1,0 +1,95 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Prices API
+  description: API for searching prices of products
+servers:
+  - url: http://localhost:8080
+    description: Base path for local execution
+
+paths:
+  /v1/prices:
+    get:
+      summary: Get the price of a product for a specific date and brand
+      operationId: getProductPrice
+      tags:
+        - Prices
+      parameters:
+        - name: applicationDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: The date-time in UTC to be applied in the search of the price
+          example: "2024-07-31T16:00:00.000"
+          required: true
+        - name: productId
+          in: query
+          schema:
+            type: integer
+          description: The unique identifier of the searched product
+          example: 35455
+          required: true
+        - name: brandId
+          in: query
+          schema:
+            type: integer
+          description: The unique ID of the brand of the searched product
+          example: 1
+          required: true
+        - name: currency
+          in: query
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 3
+          description: ISO currency code. Default is EUR
+          example: EUR
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPriceSearchResponse'
+        '400':
+          description: Invalid Request Parameters
+        '404':
+          description: Price not found for the requested params
+        
+components:
+  schemas:
+    ProductPriceSearchResponse:
+      type: object
+      properties:
+        productId:
+          type: integer
+          description: the product ID
+          example: 35455
+        brandId:
+          type: integer
+          description: the brand ID
+          example: 1
+        priceListId:
+          type: integer
+          description: the ID of the price list applied to the product
+          example: 1
+        startDate:
+          type: string
+          format: date-time
+          description: the start time (included) to be considered to sell the product in the indicated price
+          example: "2023-08-24T19:30:00.000Z"
+        endDate:
+          type: string
+          format: date-time
+          description: the end time (included) to be considered to sell the product in the indicated price
+          example: "2023-08-24T23:30:00.000Z"
+        price:
+          type: number
+          description: the final price (in the requested currency, or EUR) of the product according to the list of products
+          example: 35.45
+        currency:
+          type: string
+          description: the currency of the price
+          example: EUR
+          
