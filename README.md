@@ -7,13 +7,13 @@ Para **ejecutar el microservicio**, ejecuta la clase **PricesApplication**, aseg
     * Nombre: DB_H2_PASSWORD
     * Valor: password
 
-
-Si se desea revisar la *compilación en un IDE* es importante tener dentro del Build Path las siguientes carpetas:
+Si se desea revisar la **compilación en un IDE** es importante tener dentro del Build Path las siguientes carpetas:
 * src/main/java
 * src/main/resources
 * target/generated-resources/annotations (clases generadas por el mapstruct processor)
 * target/generated-resources/openapi/src/main/java (clases generadas por el plugin openapi-generator)
 
+Para lanzar los tests unitarios y de integración basta con ejecutar la tarea maven "test" desde consola o desde el IDE.
 
 ## CURL de ejemplo para la ejecución de la búsqueda
 
@@ -23,12 +23,12 @@ curl --location 'http://localhost:8080/v1/prices?applicationDate=2020-06-14T17:0
 
 Donde:
 
-- *applicationDate*: es la fecha de búsqueda
-- *productId*: es el ID único del producto
-- *brandId*: es el ID único de la marca/cadena
+- **applicationDate**: es la fecha de búsqueda
+- **productId**: es el ID único del producto
+- **brandId**: es el ID único de la marca/cadena
 
 Opcionalmente se puede especificar:
-- *currency*: por defecto es EUR
+- **currency**: por defecto es EUR
 
 ## Notas de desarrollo:
 - Respecto a la **especificación** de la prueba, se ha intentado realizar la implementación más acotada y acorde posible al enunciado, sin modificar el tipo de los IDs (que podrían ser UUID) ni crear tablas satélite (BRAND, PRICE_LIST, PRODUCT). Únicamente se realizaron 2 pequeños ajustes:
@@ -44,7 +44,7 @@ Opcionalmente se puede especificar:
     - Se usaron librerías externas como Lombok y Mapstruct
 
 ## Testing
-- *E2E*: se adjunta colección Postman (src/test/resources/InditexPrices.postman_collection.json) con las pruebas e2e definidas en el enunciado. Para ejecutarlas, importar en Postman, seleccionar la colección y ejecutar (Run).
-- *Integración* con MockMVC: se ejecutan en el perfil por defecto de pruebas de maven (mvn test), ejecutando también los 5 casos expuestos en el enunciado. Utiliza el perfil "test" de Spring para leer las propiedades del archivo application-test.yml
-- *Unitarios*: existen diversas clases probadas con tests unitarios con Mockito. No se realizaron tests para probar clases o métodos generados, a excepción de los mappers (ej, los toString, hashCode, equals, etc).
+- **E2E**: se adjunta colección Postman (**src/test/resources/InditexPrices.postman_collection.json**) con las pruebas e2e definidas en el enunciado. Para ejecutarlas, importar en Postman, seleccionar la colección y ejecutar (Run).
+- **Integración** con MockMVC: se ejecutan en el perfil por defecto de pruebas de maven (mvn test), ejecutando también los 5 casos expuestos en el enunciado. Utiliza el perfil "test" de Spring para leer las propiedades del archivo application-test.yml
+- **Unitarios**: existen diversas clases probadas con tests unitarios con Mockito. No se realizaron tests para probar clases o métodos generados, a excepción de los mappers (ej, los toString, hashCode, equals, etc).
 - Cobertura: se incluye plugin de Jacoco para obtener la cobertura de código mediante los tests
